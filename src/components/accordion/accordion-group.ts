@@ -1,3 +1,4 @@
+import { List } from 'ionic-angular';
 import { Component, ContentChildren, QueryList, AfterContentInit, OnDestroy } from '@angular/core';
 
 import { AccordionComponent } from './accordion';
@@ -13,7 +14,7 @@ export class AccordionGroup {
   @ContentChildren(AccordionComponent) accordions: QueryList<AccordionComponent>;
   private subscriptions = [];
 
-  private _accordions = [];
+  private _accordions: QueryList<AccordionComponent>; 
 
   constructor() {}
 
