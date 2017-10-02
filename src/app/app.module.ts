@@ -1,3 +1,4 @@
+import { SessionProvider } from '../providers/session-provider/session-provider';
 import { AboutPage } from '../pages/about/about';
 import { HomePage } from '../pages/home/home';
 import { AccountPage } from '../pages/account/account';
@@ -40,7 +41,6 @@ export const firebaseConfig = {
     StockpilePage,
     HomePage,
     AccountPage
-
   ],
   imports: [
     BrowserModule,
@@ -55,14 +55,15 @@ export const firebaseConfig = {
     TabsPage,
     StockpilePage,
     HomePage,
-    AccountPage
+    AccountPage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AngularFireDatabase,
-    AngularFireAuth
+    SessionProvider,
+    AngularFireAuth    
   ]
 })
 export class AppModule { }

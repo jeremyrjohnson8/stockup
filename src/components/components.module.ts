@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { AccordionComponent } from './accordion/accordion';
 @NgModule({
-	declarations: [AccordionComponent],
+	declarations: [
+	],
 	imports: [],
-	exports: [AccordionComponent]
+	exports: [
+	]
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

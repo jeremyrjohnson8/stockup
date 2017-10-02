@@ -5,14 +5,48 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-   
+
   <ion-navbar>
     <ion-title>Add Product</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content>
-    <button class="addProduct" (click)="startBarcodeScanner()"ion-button>Push Me</button>
+  <div class="scanner">
+      <button class="addProduct" ion-button (click)="startBarcode()">Scan Barcode</button> 
+      <button [hidden]="!manualEntry" class="addProduct" ion-button (click)="inItManualEntry()">Enter Product Manually</button>            
+  </div>
+
+  <div [hidden]="manualEntry">
+    <div class="form-group">
+      <form #productForm="ngForm">
+        <label class="form-label" for="brand">Brand </label>
+        <ion-input type="text" class="form-input" id="brand" required [(ngModel)]="brand" name="brand"></ion-input>
+
+        <label class="form-label" for="name">Name </label>
+        <ion-input type="text" class="form-input" id="name" [(ngModel)]="name" name="name"></ion-input>
+
+        <label class="form-label" for="unit">Unit </label>
+        <ion-input type="text" class="form-input" id="unit" [(ngModel)]="unit" required name="unit"></ion-input>
+
+        <label class="form-label" for="size">Size </label>
+        <ion-input class="form-input" type="text" id="size" [(ngModel)]="size" name="size"></ion-input>
+
+        <label class="form-label" for="upc">Upc </label>
+        <ion-input class="form-input" type="text" id="upc" [(ngModel)]="upc" name="upc"></ion-input>
+
+        <label class="form-label" for="quantity">Quantity</label>
+        <ion-input class="form-input" type="number" min="0" id="quantity" required [(ngModel)]="quantity" name="quantity"></ion-input>
+
+      </form>
+    </div>
+    <ion-item class="item">
+      <ion-label class="selecter-label">Select Category</ion-label>
+      <ion-select class="selecter" [(ngModel)]="category">
+        <ion-option *ngFor="let category of categories" value="{{category.value}}"> {{category.key}} </ion-option>
+      </ion-select>
+    </ion-item>
+    <button class="addProduct" ion-button (click)="onSave(); productForm.reset()"  [disabled]="!productForm.form.valid">Submit</button>    
+  </div>
 </ion-content>

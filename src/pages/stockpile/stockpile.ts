@@ -1,6 +1,6 @@
 import { User } from '../../dtos/user';
 import { StockpileProvider } from '../../providers/stockpile/stockpile';
-import { SessionProvider } from '../../providers/session/session';
+import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { Product, ProductCategory } from '../../dtos/product';
 import { AddProductPage } from '../add-product/add-product';
 import { Component } from '@angular/core';

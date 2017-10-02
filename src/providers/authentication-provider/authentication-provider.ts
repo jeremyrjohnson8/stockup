@@ -19,6 +19,7 @@ export class AuthenticationProvider {
   _angFire: AngularFireDatabase; 
   dbUserId: string;
   _angAuth: AngularFireAuth; 
+  currentUser: User; 
   private afObjObs: FirebaseObjectObservable<any>; 
 
 
@@ -46,6 +47,14 @@ export class AuthenticationProvider {
 
   public getCurrentUserById(){
 
+  }
+
+
+  public doLogin(email: string, password: string) {
+    this._angAuth.auth.signInWithEmailAndPassword(email, password).then(e => [
+      this.currentUser = e,
+      console.log(`New current user is ` + this.currentUser)
+    ]); 
   }
 
 }

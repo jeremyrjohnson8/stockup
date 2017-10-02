@@ -16,7 +16,8 @@ export class ProductProvider {
   endPoint = '/stockpile/';
   dbUserId = '/';
   fboo: FirebaseObjectObservable<any>;
-  constructor(public http: Http) {
+  constructor(private _af: AngularFireDatabase) {
+    this.af = _af;  
     console.log('Hello ProductProvider Provider');
   }
 

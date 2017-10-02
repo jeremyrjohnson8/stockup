@@ -1,7 +1,7 @@
-import { ProductProvider } from '../../providers/product/product-provider';
+import { ProductProvider } from '../../providers/product-provider/product-provider';
 import { User } from '../../dtos/user';
 import { Product, ProductCategory } from '../../dtos/product';
-import { SessionProvider } from '../../providers/session/session';
+import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
@@ -25,7 +25,7 @@ export class AddProductPage {
   public unit: string = null;
   public quantity: number = 0;
   public upc: number = 0;
-  public upcString: string; 
+  public upcString: string;
   public perishable: boolean;
   public brand: string = null;
   public categories: any[];
@@ -38,6 +38,7 @@ export class AddProductPage {
   private currentUser: User = null;
   public isValid = false;
   public userObservable: any;
+  public manualEntry: boolean;
   public barcodeScannerOptions: BarcodeScannerOptions = {
     preferFrontCamera: false,
     showFlipCameraButton: false,
@@ -53,15 +54,17 @@ export class AddProductPage {
     public product: ProductProvider,
     public sesh: SessionProvider,
     public barcode: BarcodeScanner) {
-    this.categories = [{ key: "HYGIENE_AND_GROOMING", value: ProductCategory.HYGIENE_AND_GROOMING },
-    { key: "FOOD_AND_DRINK", value: ProductCategory.FOOD_AND_DRINK },
-    { key: "ALCOHOL", value: ProductCategory.ALCOHOL },
-    { key: "BABY_CARE", value: ProductCategory.BABY_CARE },
-    { key: "HEALTH_AND_WELLNESS", value: ProductCategory.HEALTH_AND_WELLNESS },
-    { key: "LAUNDRY", value: ProductCategory.LAUNDRY },
-    { key: "PAPER_PRODUCTS", value: ProductCategory.PAPER_PRODUCTS },
-    { key: "CLEANING_SUPPLIES", value: ProductCategory.CLEANING_SUPPLIES },
-    { key: "OFFICE_SUPPLIES", value: ProductCategory.OFFICE_SUPPLIES }]
+    this.categories = [
+      { key: 'Hygiene and Grooming', value: ProductCategory.HYGIENE_AND_GROOMING },
+      { key: 'Food and Drink', value: ProductCategory.FOOD_AND_DRINK },
+      { key: 'Alcohol', value: ProductCategory.ALCOHOL },
+      { key: 'Baby Care', value: ProductCategory.BABY_CARE },
+      { key: 'Heatlh and Wellness', value: ProductCategory.HEALTH_AND_WELLNESS },
+      { key: 'Landry', value: ProductCategory.LAUNDRY },
+      { key: 'Paper Products', value: ProductCategory.PAPER_PRODUCTS },
+      { key: 'Clearning Supplies', value: ProductCategory.CLEANING_SUPPLIES },
+      { key: 'Office Supplies', value: ProductCategory.OFFICE_SUPPLIES }
+    ]
 
     this._sesh = sesh;
     this.product = product;
@@ -69,6 +72,7 @@ export class AddProductPage {
 
 
     this.ownerId = navParams.get('username');
+    this.manualEntry = true;
   }
 
   ionViewDidLoad() {
@@ -79,18 +83,18 @@ export class AddProductPage {
   startBarcodeScanner(): void {
     this.barcode.scan(this.barcodeScannerOptions).then((barcodeData) => {
       // Success! Barcode data is here
-      this.upcString = barcodeData.text; 
+      this.upcString = barcodeData.text;
       if (this.upcString != null) {
         this.parseUpc(this.upcString);
       }
-      
+
     }, (err) => {
       // An error occurred
       alert(err);
     });
   }
 
-  parseUpc(upc: string) :void {
+  parseUpc(upc: string): void {
     parseInt(upc, this.upc);
   }
 
@@ -111,6 +115,11 @@ export class AddProductPage {
   public isFormValid(): boolean {
 
     return this.isValid;
+  }
+
+  public inItManualEntry() : void {
+    this.manualEntry = !this.manualEntry;
+    console.log(this.manualEntry);
   }
 
 

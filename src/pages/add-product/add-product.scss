@@ -1,8 +1,40 @@
 page-add-product {
+    .scanner{
+        position: relative;
+        margin: 5% 0%;
+    }
+
+    .form-group {
+        position: relative;
+        width: 100%;
+        margin: 5% 5% 5% 5%;
+        .form-input {
+            position: relative;
+            width: 90%;
+            border: solid lightgray;
+            border-radius: 1.7rem;          
+        }
+
+        .form-label {
+            position: relative;
+            width: 100%;
+            color: black;
+            font-weight: bold;
+            font-size: 1.3rem;
+            padding: 2% 2% 2% 2%; 
+        }
+    }
     .addProduct{
-        position: absolute;
-        bottom: 10%;
+        position: relative;
         width: 80%;
         margin: 1% 10%;
     }
+    .item {
+        position: relative;
+        width: 90%;
+        margin: 0% 5% 5% 5%;
+        border: solid lightgray;
+        border-radius: 1.7rem;  
+    }
+
 }

@@ -1,4 +1,4 @@
-import { SessionProvider } from '../session/session';
+import { SessionProvider } from '../session-provider/session-provider';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
