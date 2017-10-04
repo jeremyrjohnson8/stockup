@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { LoginPage } from '../pages/login/login';
 import { AuthenticationProvider } from '../providers/authentication-provider/authentication-provider';
 import { AngularFireAuthProvider } from 'angularfire2/auth';
@@ -6,8 +7,7 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
-
+import { AngularFireDatabase } from 'angularfire2/database';
 import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
@@ -15,16 +15,17 @@ import { TabsPage } from '../pages/tabs/tabs';
 })
 export class MyApp {
   private rootPage:any = LoginPage;
-  private items: FirebaseListObservable<any[]>;
+  private items: Observable<any[]>;
   public initLoginAttempted: boolean = false;
   
   constructor(private platform: Platform, 
     private statusBar: StatusBar, 
     private splashScreen: SplashScreen, 
-    private db: AngularFireDatabase,
-    private auth: AuthenticationProvider
+    private auth: AuthenticationProvider,
+    private db: AngularFireDatabase
   ) {
-    this.items = db.list('/user');
+    debugger; 
+    this.items = db.list('/user').valueChanges();
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

@@ -1,8 +1,9 @@
+import { Observable } from 'rxjs/Rx';
 import { User } from '../../dtos/user';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { AngularFireDatabase, FirebaseObjectObservable } from "angularfire2/database";
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from "angularfire2/auth";
 
 /*
@@ -20,7 +21,7 @@ export class AuthenticationProvider {
   dbUserId: string;
   _angAuth: AngularFireAuth; 
   currentUser: User; 
-  private afObjObs: FirebaseObjectObservable<any>; 
+  private afObjObs: Observable<any>; 
 
 
   constructor(angularFire: AngularFireDatabase, angAuth: AngularFireAuth) { 
@@ -41,8 +42,8 @@ export class AuthenticationProvider {
   }
 
   public CreateStockPile(userid: string){ 
-    this.afObjObs = this._angFire.object(this.spEndpoint + userid);
-    this.afObjObs.set(userid);
+    // this.afObjObs = this._angFire.doc(this.spEndpoint + userid);
+    // this.afObjObs.set(userid);
   }
 
   public getCurrentUserById(){

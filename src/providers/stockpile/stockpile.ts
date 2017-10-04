@@ -1,8 +1,9 @@
+import { Observable } from 'rxjs/Rx';
 import { SessionProvider } from '../session-provider/session-provider';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database";
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Product, ProductCategory } from '../../dtos/product';
 
 /*
@@ -21,7 +22,7 @@ export class StockpileProvider {
   private _userURL = "";
   private af: AngularFireDatabase;
   private sesh: SessionProvider;
-  private fbObjObs: FirebaseListObservable<any[]>;
+  private fbObjObs: Observable<any[]>;
   products: Product;
   products1: Product;
   products2: Product;

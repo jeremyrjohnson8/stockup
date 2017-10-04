@@ -1,8 +1,9 @@
+import { AngularFireDatabase } from 'angularfire2/database-deprecated';
+import { Observable } from 'rxjs/Rx';
 import { Product } from '../../dtos/product';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { FirebaseObjectObservable, AngularFireDatabase } from "angularfire2/database";
 
 /*
   Generated class for the ProductProvider provider.
@@ -15,7 +16,7 @@ export class ProductProvider {
   af: AngularFireDatabase;
   endPoint = '/stockpile/';
   dbUserId = '/';
-  fboo: FirebaseObjectObservable<any>;
+  fboo: Observable<any>;
   constructor(private _af: AngularFireDatabase) {
     this.af = _af;  
     console.log('Hello ProductProvider Provider');
@@ -28,10 +29,8 @@ export class ProductProvider {
     // Build up connection string - maybe make seperate method
     x = this.endPoint + newProd.ownerId;
     x = x + '/' + newProd.name;
-    this.fboo = this.af.object(x);
-    //   this.dbUserId = this.endPoint + newProd.name;
-    //    this.fboo = this.af.database.object(this.dbUserId + newProd.name); 
-    this.fboo.set(newProd);
+     this.af.object(x).set(newProd);
+
   }
 
 

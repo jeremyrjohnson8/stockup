@@ -1,3 +1,5 @@
+import { AuthenticationProvider } from '../providers/authentication-provider/authentication-provider';
+import { AngularFireDatabase } from 'angularfire2/database-deprecated';
 import { SessionProvider } from '../providers/session-provider/session-provider';
 import { AboutPage } from '../pages/about/about';
 import { HomePage } from '../pages/home/home';
@@ -10,6 +12,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { Platform } from 'ionic-angular';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -18,19 +21,17 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 ///Modules 
 import { ProvidersModule } from '../modules/providers-module/providers-module';
-import { AngularFireDatabase } from "angularfire2/database";
-import { AngularFireAuth, AUTH_PROVIDERS } from "angularfire2/AUTH";
-import { AngularFireModule } from "angularfire2";
-
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuthProvider } from 'angularfire2/auth';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyC7uKvwsoqe-_mV6RLu6fHdRVTDKBWieoc",
-  authDomain: "stocker-4c25a.firebaseapp.com",
-  databaseURL: "https://stocker-4c25a.firebaseio.com",
-  storageBucket: "stocker-4c25a.appspot.com",
-  messagingSenderId: "59699739686"
+  apiKey: 'AIzaSyC7uKvwsoqe-_mV6RLu6fHdRVTDKBWieoc',
+  authDomain: 'stocker-4c25a.firebaseapp.com',
+  databaseURL: 'https://stocker-4c25a.firebaseio.com',
+  storageBucket: 'stocker-4c25a.appspot.com',
+  messagingSenderId: '59699739686'
 };
-
 
 
 
@@ -47,7 +48,9 @@ export const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     ProvidersModule,
-    PagesModule
+    PagesModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -61,9 +64,11 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AngularFireDatabase,
     SessionProvider,
-    AngularFireAuth    
+    AngularFireDatabase,
+    AuthenticationProvider,
+    AngularFireAuthProvider,
+    Platform
   ]
 })
 export class AppModule { }

@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { User } from '../../dtos/user';
 import { StockpileProvider } from '../../providers/stockpile/stockpile';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
@@ -5,7 +6,7 @@ import { Product, ProductCategory } from '../../dtos/product';
 import { AddProductPage } from '../add-product/add-product';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { FirebaseListObservable, AngularFireDatabase } from "angularfire2/database";
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the StockpilePage page.
@@ -28,7 +29,7 @@ export class StockpilePage {
   private routeParam: string; 
   public currentUser: User; 
   private _stockServ: StockpileProvider; 
-  private fboo: FirebaseListObservable<any[]>;
+  private fboo: Observable<any[]>;
   private dbEndPoint = '/products/';
   endPoint = '/stockpile/';
   dbUserId = '/'; 
@@ -55,16 +56,8 @@ export class StockpilePage {
      this.userId = this.routeParam; 
     var x = this.endPoint + this.userId;
 
-    this.fboo = this.af.list(x, { preserveSnapshot: true });
-      this.fboo.subscribe(snapshots => {
-        if(this.productArray.length === 0){
-          snapshots.forEach(snapshot => {
-            console.log(snapshot.key)
-            console.log(snapshot.val())
-            this.productArray.push(<Product>snapshot.val()); 
-          })
-        }
-      }); 
+    this.fboo = this.af.list(x).valueChanges();
+    
   }
 
   private addProduct(): void {

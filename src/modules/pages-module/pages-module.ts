@@ -1,3 +1,5 @@
+import { LoginPage } from '../../pages/login/login';
+import { SignUpPage } from '../../pages/sign-up/sign-up';
 import { CommonModule } from '@angular/common';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { AddProductPage } from '../../pages/add-product/add-product';
@@ -6,7 +8,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
-    AddProductPage
+    AddProductPage,
+    LoginPage,
+    SignUpPage
   ],
   imports: [
     CommonModule,
@@ -14,7 +18,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    AddProductPage
+    AddProductPage,
+    LoginPage,
+    SignUpPage
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

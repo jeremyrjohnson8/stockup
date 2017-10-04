@@ -3,7 +3,7 @@ import { User } from '../../dtos/user';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { AngularFireDatabase, FirebaseObjectObservable } from "angularfire2/database";
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /*
   Generated class for the SessionProvider provider.
@@ -21,12 +21,12 @@ export class SessionProvider {
   number1: number;
   obs: Observable<any>;
 
-  currentUsers: FirebaseObjectObservable<any>; 
+  currentUsers: Observable<any>; 
   firstName: string;
   constructor(public userData: AngularFireDatabase) {
     this.endpoint = 'users/';
     this._userData = userData;
-    this.currentUsers = this._userData.object(this.endpoint);
+    this.currentUsers = this._userData.object(this.endpoint).valueChanges();
   }
 
 
@@ -46,9 +46,9 @@ export class SessionProvider {
      return this.currentUser; 
    }
    
-    public getCurrentUser(userid: string): FirebaseObjectObservable<any>{
+    public getCurrentUser(userid: string): Observable<any>{
       var finalEndPoint = this.endPointBuilder(userid); 
-      this.currentUsers = this._userData.object(finalEndPoint);
+      this.currentUsers = this._userData.object(finalEndPoint).valueChanges();
       console.log('Out ' + this.currentUsers);
       return this.currentUsers;   
     }
