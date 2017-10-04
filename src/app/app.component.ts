@@ -24,7 +24,6 @@ export class MyApp {
     private auth: AuthenticationProvider,
     private db: AngularFireDatabase
   ) {
-    debugger; 
     this.items = db.list('/user').valueChanges();
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

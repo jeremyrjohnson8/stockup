@@ -67,8 +67,7 @@ export const firebaseConfig = {
     SessionProvider,
     AngularFireDatabase,
     AuthenticationProvider,
-    AngularFireAuthProvider,
-    Platform
+    AngularFireAuthProvider
   ]
 })
 export class AppModule { }
