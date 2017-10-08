@@ -1,3 +1,4 @@
+import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { StockpilePage } from '../stockpile/stockpile';
 import { AccountPage } from '../account/account';
 import { Component } from '@angular/core';
@@ -14,8 +15,7 @@ export class TabsPage {
   tab2Root = StockpilePage;
   tab3Root = AccountPage;
   
-
+  sesh: SessionProvider; 
   constructor() {
-
   }
 }

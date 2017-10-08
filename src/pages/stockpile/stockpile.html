@@ -14,5 +14,13 @@
 
 
 <ion-content>
-    <button class="addProduct" ion-button (click)="addProduct()">Push Me</button>
+  <ion-grid>
+    <ion-row col-sm wrap *ngFor="let prod of productArray">
+      <ion-col col-3> {{product.name}}</ion-col>
+      <ion-col col-3> {{product.brand}}</ion-col>
+      <ion-col col-3> {{options[product.category]}}</ion-col>
+      <ion-col col-3> <button ion-button small color="danger" (click)="increment(res)"> Details</button></ion-col>
+    </ion-row>
+  </ion-grid>
+  <button class="addProduct" ion-button (click)="addProduct()">Push Me</button>
 </ion-content>

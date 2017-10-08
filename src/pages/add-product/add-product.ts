@@ -76,7 +76,7 @@ export class AddProductPage {
   }
 
   ionViewDidLoad() {
-    this.userObservable = this.sesh.getCurrentUser(this.ownerId);
+    this.userObservable = this.sesh.getCurrentUserById(this.ownerId);
   }
 
 

@@ -40,6 +40,21 @@ export class StockpileProvider {
     this.productList = [];
   }
 
+  private endPoint = '/stockpile/';
+  private dbUserId = '/'; 
+  fboo: Observable<any[]>; 
+  stock: Array<any> = new Array<any>(); 
+
+  GetStockPileByUserId (userid: string): Observable<any[]>{
+    var x = ""; 
+    var z: string[] = new Array<any>();  
+    x = this.endPoint + userid;
+    
+    this.fboo = this.af.list(x).valueChanges();
+
+     return this.fboo; 
+  }
+
   private GetTestStockPile(): Array<Product>{
     this.products = new Product(); 
     this.products.brand = "Dove" ;

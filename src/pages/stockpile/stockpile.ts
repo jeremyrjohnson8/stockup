@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs/Rx';
+import { debug } from 'util';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { User } from '../../dtos/user';
-import { StockpileProvider } from '../../providers/stockpile/stockpile';
+import { StockpileProvider } from '../../providers/stockpile/stockpile-provider';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { Product, ProductCategory } from '../../dtos/product';
 import { AddProductPage } from '../add-product/add-product';
@@ -15,7 +16,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
  * Ionic pages and navigation.
  */
 
-//@IonicPage()
+@IonicPage()
 @Component({
   selector: 'page-stockpile',
   templateUrl: 'stockpile.html',
@@ -40,10 +41,6 @@ export class StockpilePage {
     this._stockServ = stockPileSvc; 
 
     this.productArray = []; 
-
-      
-    this.routeParam = this.navParams.get('username');
-    
     this.generateEnumStrings(); 
   }
 
@@ -52,12 +49,33 @@ export class StockpilePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad StockpilePage');
-     this.userId = this.routeParam; 
-    var x = this.endPoint + this.userId;
+    let userObs = this.sesh.getCurrentUser();
+    let userSub = userObs.subscribe((user: User) => {
+      this.currentUser = user;
+      let x = this.endPoint + this.currentUser.userid;      
+      this.fboo = this.af.list(x).valueChanges();
+      this.setUpStockSub(this.fboo);
+      this.cleanUpSub(userSub); 
+    }); 
 
-    this.fboo = this.af.list(x).valueChanges();
-    
+  }
+
+  private setUpStockSub(fboo: Observable<any[]>) : void{
+    if (this.fboo){
+      this.fboo.subscribe((prods: Array<Product>) => {
+        prods.forEach(prod => {
+          this.productArray.push(prod);
+          console.log(prod);
+        });
+        (err: any) => {
+          alert(err.message);
+        }
+      });
+    }
+  }
+
+  private cleanUpSub(userSub: Subscription) : void {
+   // userSub.unsubscribe(); 
   }
 
   private addProduct(): void {
