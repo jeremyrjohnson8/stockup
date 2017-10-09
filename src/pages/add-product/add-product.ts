@@ -1,6 +1,8 @@
+import { Subject } from 'rxjs/Rx';
+import { MemoryStoreProvider } from '../../providers/memory-store/memory-store';
 import { ProductProvider } from '../../providers/product-provider/product-provider';
-import { User } from '../../dtos/user';
-import { Product, ProductCategory } from '../../dtos/product';
+import { User } from '../../models/user';
+import { Product, ProductCategory } from '../../models/product';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -13,13 +15,12 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
  * Ionic pages and navigation.
  */
 
-//@IonicPage()
+@IonicPage()
 @Component({
   selector: 'page-add-product',
   templateUrl: 'add-product.html',
 })
 export class AddProductPage {
-  public _product: ProductProvider;
   public name: string = null;
   public size: string = null;
   public unit: string = null;
@@ -34,11 +35,11 @@ export class AddProductPage {
   public category: any;
   private newProduct: Product;
   private userId: string;
-  private _sesh: SessionProvider;
   private currentUser: User = null;
   public isValid = false;
   public userObservable: any;
   public manualEntry: boolean;
+  public userUnsubscribe = new Subject<void>();
   public barcodeScannerOptions: BarcodeScannerOptions = {
     preferFrontCamera: false,
     showFlipCameraButton: false,
@@ -53,7 +54,9 @@ export class AddProductPage {
   constructor(private navCtrl: NavController, public navParams: NavParams,
     public product: ProductProvider,
     public sesh: SessionProvider,
-    public barcode: BarcodeScanner) {
+    public barcode: BarcodeScanner,
+    public memStore: MemoryStoreProvider  
+  ) {
     this.categories = [
       { key: 'Hygiene and Grooming', value: ProductCategory.HYGIENE_AND_GROOMING },
       { key: 'Food and Drink', value: ProductCategory.FOOD_AND_DRINK },
@@ -65,18 +68,22 @@ export class AddProductPage {
       { key: 'Clearning Supplies', value: ProductCategory.CLEANING_SUPPLIES },
       { key: 'Office Supplies', value: ProductCategory.OFFICE_SUPPLIES }
     ]
-
-    this._sesh = sesh;
-    this.product = product;
-    this.selection = this.category;
-
-
-    this.ownerId = navParams.get('username');
+    
     this.manualEntry = true;
   }
 
   ionViewDidLoad() {
-    this.userObservable = this.sesh.getCurrentUserById(this.ownerId);
+    debugger;
+    this.currentUser = this.memStore.userMemoryData().data;
+    if (this.currentUser) {
+      this.memStore.userMemoryData().dataSubject
+        .takeUntil(this.userUnsubscribe)
+        .subscribe((value: User) => {
+          this.currentUser = value;
+          this.ownerId = value.userid; 
+          debugger; 
+        });
+    }
   }
 
 
@@ -87,7 +94,6 @@ export class AddProductPage {
       if (this.upcString != null) {
         this.parseUpc(this.upcString);
       }
-
     }, (err) => {
       // An error occurred
       alert(err);
@@ -120,6 +126,11 @@ export class AddProductPage {
   public inItManualEntry() : void {
     this.manualEntry = !this.manualEntry;
     console.log(this.manualEntry);
+  }
+
+  ionViewWillUnload() {
+    this.userUnsubscribe.next();
+    this.userUnsubscribe.complete();
   }
 
 

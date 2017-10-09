@@ -1,9 +1,11 @@
+import { StockPile } from '../../models/stockpile';
+import { MemoryStoreProvider } from '../../providers/memory-store/memory-store';
 import { debug } from 'util';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { User } from '../../dtos/user';
-import { StockpileProvider } from '../../providers/stockpile/stockpile-provider';
+import { User } from '../../models/user';
+import { StockpileProvider } from '../../providers/stockpile-provider/stockpile-provider';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
-import { Product, ProductCategory } from '../../dtos/product';
+import { Product, ProductCategory } from '../../models/product';
 import { AddProductPage } from '../add-product/add-product';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -22,91 +24,74 @@ import { AngularFireDatabase } from 'angularfire2/database';
   templateUrl: 'stockpile.html',
 })
 export class StockpilePage {
-  productArray: Array<Product>; 
-  ProductCategory : ProductCategory; 
-  options : string[] = Object.keys(ProductCategory); 
-  private _sesh: SessionProvider; 
-  private userId: string; 
-  private routeParam: string; 
-  public currentUser: User; 
-  private _stockServ: StockpileProvider; 
-  private fboo: Observable<any[]>;
+  productArray: Array<Product>;
+  ProductCategory: ProductCategory;
+  options: string[] = Object.keys(ProductCategory);
+  private _sesh: SessionProvider;
+  private userId: string;
+  private routeParam: string;
+  public currentUser: User;
   private dbEndPoint = '/products/';
-  endPoint = '/stockpile/';
-  dbUserId = '/'; 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private stockPileSvc: StockpileProvider, private sesh: SessionProvider, private af: AngularFireDatabase ) //Import StockPile Service 
-  {
-   
-    this._sesh = sesh;  
-    this._stockServ = stockPileSvc; 
-
-    this.productArray = []; 
-    this.generateEnumStrings(); 
+  private endPoint = '/stockpile/';
+  private dbUserId = '/';
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public stockPileSvc: StockpileProvider,
+    private memStore: MemoryStoreProvider,
+    private af: AngularFireDatabase) {
+    
+    this.productArray = [];
+    this.generateEnumStrings();
   }
 
-  private generateEnumStrings(){
-    this.options = this.options.slice(this.options.length/2); 
+  private generateEnumStrings() {
+    this.options = this.options.slice(this.options.length / 2);
   }
 
   ionViewDidLoad() {
-    let userObs = this.sesh.getCurrentUser();
-    let userSub = userObs.subscribe((user: User) => {
-      this.currentUser = user;
-      let x = this.endPoint + this.currentUser.userid;      
-      this.fboo = this.af.list(x).valueChanges();
-      this.setUpStockSub(this.fboo);
-      this.cleanUpSub(userSub); 
-    }); 
-
-  }
-
-  private setUpStockSub(fboo: Observable<any[]>) : void{
-    if (this.fboo){
-      this.fboo.subscribe((prods: Array<Product>) => {
-        prods.forEach(prod => {
+    this.userId = this.memStore.userMemoryData().data.userid; 
+    this.stockPileSvc.GetStockPileByUserId(this.userId).then((stock: StockPile) => {
+      if (stock){
+        stock.value.forEach(prod => {
           this.productArray.push(prod);
-          console.log(prod);
         });
-        (err: any) => {
-          alert(err.message);
-        }
-      });
-    }
+      }
+    }); 
   }
 
-  private cleanUpSub(userSub: Subscription) : void {
-   // userSub.unsubscribe(); 
+  private setUpStockSub(fboo: Observable<any[]>): void {
+
+  }
+
+  private cleanUpSub(userSub: Subscription): void {
+    // userSub.unsubscribe(); 
   }
 
   private addProduct(): void {
     this.navCtrl.push(AddProductPage);
   }
 
-  public increment(index: number, productName: string):void {
-    
-    console.log(index, productName);
+  public increment(index: number, productName: string): void {
+
     var finalEndpoint = this.endPoint + this.userId + '/' + productName + '/quantity/';
-    var x = this.productArray[index].quantity + 1; 
+    var x = this.productArray[index].quantity + 1;
     this.af.object(finalEndpoint).set(x);
-    
-    this.productArray[index].quantity += 1; 
+
+    this.productArray[index].quantity += 1;
 
   }
 
-  public decrement(index: number, productName: string): void{
-    console.log(index, productName);
+  public decrement(index: number, productName: string): void {
     var finalEndpoint = this.endPoint + this.userId + '/' + productName + '/quantity/';
-    var x = this.productArray[index].quantity - 1 ; 
+    var x = this.productArray[index].quantity - 1;
 
-    if (x == 0){
+    if (x == 0) {
       var productEndPoint = this.endPoint + this.userId + '/' + productName;
       this.af.object(productEndPoint).remove();
-      console.log(this.productArray);
       var y = this.productArray.splice(index, 1);
-      console.log(y);
     } else {
       this.af.object(finalEndpoint).set(x);
-      this.productArray[index].quantity -= 1; 
+      this.productArray[index].quantity -= 1;
     }
   }
 

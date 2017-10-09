@@ -1,4 +1,6 @@
-import { Observable } from 'rxjs/Rx';
+import { User } from '../models/user';
+import { MemoryStoreProvider } from '../providers/memory-store/memory-store';
+import { Observable, Subject } from 'rxjs/Rx';
 import { LoginPage } from '../pages/login/login';
 import { AuthenticationProvider } from '../providers/authentication-provider/authentication-provider';
 import { AngularFireAuthProvider } from 'angularfire2/auth';
@@ -14,15 +16,18 @@ import { TabsPage } from '../pages/tabs/tabs';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  private rootPage:any = LoginPage;
+  private rootPage: any = LoginPage;
   private items: Observable<any[]>;
   public initLoginAttempted: boolean = false;
-  
-  constructor(private platform: Platform, 
-    private statusBar: StatusBar, 
-    private splashScreen: SplashScreen, 
-    private auth: AuthenticationProvider,
-    private db: AngularFireDatabase
+  private user: User;
+  public userUnsubscribe = new Subject<void>();
+
+
+  constructor(private platform: Platform,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    private db: AngularFireDatabase,
+    private memoryStoreProvider: MemoryStoreProvider
   ) {
     this.items = db.list('/user').valueChanges();
     platform.ready().then(() => {
@@ -36,21 +41,17 @@ export class MyApp {
   /**
      * init stuff here that requires the platform to be ready
      */
-    private initWhenPlatformReady(): void {
-        this.platform.ready().then(() => {
-            this.doLogin();
-            // wait before setting login attempt flag
-            setTimeout(() => { this.initLoginAttempted = true; }, 500);
-        });
-    }
+  private initWhenPlatformReady(): void {
+    this.platform.ready().then(() => {
+      // wait before setting login attempt flag
+      setTimeout(() => { this.initLoginAttempted = true; }, 500);
+    });
+  }
 
-    private doLogin() : void {
-      // let email = `jeremyrjohnson8@gmail.com`;
-      // let password = 'Karma3-18';
-      // this.auth.doLogin(email, password); 
-
-    }
-
+  ionViewWillUnload(): void {
+    this.userUnsubscribe.next();
+    this.userUnsubscribe.complete();
+  }
 }
 
 

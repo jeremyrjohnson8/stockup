@@ -1,3 +1,5 @@
+import { NavParams } from 'ionic-angular';
+import { MemoryStoreProvider } from '../../providers/memory-store/memory-store';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { StockpilePage } from '../stockpile/stockpile';
 import { AccountPage } from '../account/account';
@@ -15,7 +17,15 @@ export class TabsPage {
   tab2Root = StockpilePage;
   tab3Root = AccountPage;
   
-  sesh: SessionProvider; 
-  constructor() {
+  constructor(memStore: MemoryStoreProvider, 
+    private navParams: NavParams, 
+    public sesh: SessionProvider) {
+    let uid = navParams.get(`uid`); 
+    this.inItMemStore(uid); 
   }
+
+  inItMemStore(uid: string) : void {
+    this.sesh.getCurrentUserById(uid);
+  }
+  
 }

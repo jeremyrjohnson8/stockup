@@ -12,7 +12,8 @@ export class User {
     birthday: string;  
     userid: string; 
 
-    constructor(){
-        
+    constructor(fbAuth: FirebaseAuthResult){
+        if (fbAuth) {
+        }
     }
 }

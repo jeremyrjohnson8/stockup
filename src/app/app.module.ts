@@ -24,6 +24,8 @@ import { ProvidersModule } from '../modules/providers-module/providers-module';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuthProvider } from 'angularfire2/auth';
+import { MemoryStoreProvider } from '../providers/memory-store/memory-store';
+import { NotificationProvider } from '../providers/notification-provider/notification-provider';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyC7uKvwsoqe-_mV6RLu6fHdRVTDKBWieoc',
@@ -67,7 +69,9 @@ export const firebaseConfig = {
     SessionProvider,
     AngularFireDatabase,
     AuthenticationProvider,
-    AngularFireAuthProvider
+    AngularFireAuthProvider,
+    MemoryStoreProvider,
+    NotificationProvider
   ]
 })
 export class AppModule { }

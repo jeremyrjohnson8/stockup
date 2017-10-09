@@ -1,6 +1,7 @@
+import { MemoryStoreProvider } from '../memory-store/memory-store';
 import { AngularFireDatabase } from 'angularfire2/database-deprecated';
 import { Observable } from 'rxjs/Rx';
-import { Product } from '../../dtos/product';
+import { Product } from '../../models/product';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -13,24 +14,25 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class ProductProvider {
-  af: AngularFireDatabase;
-  endPoint = '/stockpile/';
-  dbUserId = '/';
+  private endPoint = '/stockpile/';
+  private slash = '/';
+  private dbUserId: string; 
   fboo: Observable<any>;
-  constructor(private _af: AngularFireDatabase) {
-    this.af = _af;  
-    console.log('Hello ProductProvider Provider');
+  constructor(public af: AngularFireDatabase,
+  public memStoreProvider: MemoryStoreProvider) {
+    if (memStoreProvider.loginMemoryData().data) {
+      this.dbUserId = memStoreProvider.loginMemoryData().data.uid;       
+    }
   }
 
   public createNewProduct(newProd: Product): void {
-    var x = "";
+    let modifiedEndpoint = ``;
     console.log(newProd.ownerId);
 
     // Build up connection string - maybe make seperate method
-    x = this.endPoint + newProd.ownerId;
-    x = x + '/' + newProd.name;
-     this.af.object(x).set(newProd);
-
+    modifiedEndpoint = this.endPoint + newProd.ownerId;
+    modifiedEndpoint = modifiedEndpoint + '/' + newProd.name;
+    this.af.object(modifiedEndpoint).set(newProd);
   }
 
 

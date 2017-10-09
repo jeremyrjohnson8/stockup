@@ -1,4 +1,6 @@
-import { User } from '../../dtos/user';
+import { Subject } from 'rxjs/Rx';
+import { MemoryStoreProvider } from '../../providers/memory-store/memory-store';
+import { User } from '../../models/user';
 import { SessionProvider } from '../../providers/session-provider/session-provider';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
@@ -8,13 +10,29 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  currentUser = new User();
+  private currentUser: User;
+  public userUnsubscribe = new Subject<void>();
 
-  firstName: string; 
-  constructor(public navCtrl: NavController, public sesh: SessionProvider) {
-    let obsResp = this.sesh.getCurrentUser();   
-    obsResp.subscribe(e => {
-      this.currentUser = e; 
-    });
+  firstName: string;
+  constructor(public navCtrl: NavController,
+    public memStore: MemoryStoreProvider) {
+
+  }
+
+  ionViewDidLoad() {
+    // Setup data
+    this.currentUser = this.memStore.userMemoryData().data;
+    if (this.currentUser) {
+      this.memStore.userMemoryData().dataSubject
+        .takeUntil(this.userUnsubscribe)
+        .subscribe((value: User) => {
+          this.currentUser = value;
+        });
+    }
+  }
+
+  ionViewWillUnload() {
+    this.userUnsubscribe.next();
+    this.userUnsubscribe.complete();
   }
 }
