@@ -1,6 +1,5 @@
 import { StockPile } from '../../models/stockpile';
 import { MemoryStoreProvider } from '../../providers/memory-store/memory-store';
-import { debug } from 'util';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { User } from '../../models/user';
 import { StockpileProvider } from '../../providers/stockpile-provider/stockpile-provider';
@@ -40,7 +39,7 @@ export class StockpilePage {
     private memStore: MemoryStoreProvider,
     private af: AngularFireDatabase) {
     
-    this.productArray = [];
+    this.productArray = stockPileSvc.GetTestStockPile();
     this.generateEnumStrings();
   }
 
@@ -50,13 +49,13 @@ export class StockpilePage {
 
   ionViewDidLoad() {
     this.userId = this.memStore.userMemoryData().data.userid; 
-    this.stockPileSvc.GetStockPileByUserId(this.userId).then((stock: StockPile) => {
-      if (stock){
-        stock.value.forEach(prod => {
-          this.productArray.push(prod);
-        });
-      }
-    }); 
+    // this.stockPileSvc.GetStockPileByUserId(this.userId).then((stock: StockPile) => {
+    //   if (stock){
+    //     stock.value.forEach(prod => {
+    //       this.productArray.push(prod);
+    //     });
+    //   }
+    // }); 
   }
 
   private setUpStockSub(fboo: Observable<any[]>): void {
@@ -76,7 +75,6 @@ export class StockpilePage {
     var finalEndpoint = this.endPoint + this.userId + '/' + productName + '/quantity/';
     var x = this.productArray[index].quantity + 1;
     this.af.object(finalEndpoint).set(x);
-
     this.productArray[index].quantity += 1;
 
   }

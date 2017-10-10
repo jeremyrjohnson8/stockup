@@ -55,7 +55,7 @@ export class AddProductPage {
     public product: ProductProvider,
     public sesh: SessionProvider,
     public barcode: BarcodeScanner,
-    public memStore: MemoryStoreProvider  
+    public memStore: MemoryStoreProvider
   ) {
     this.categories = [
       { key: 'Hygiene and Grooming', value: ProductCategory.HYGIENE_AND_GROOMING },
@@ -68,22 +68,24 @@ export class AddProductPage {
       { key: 'Clearning Supplies', value: ProductCategory.CLEANING_SUPPLIES },
       { key: 'Office Supplies', value: ProductCategory.OFFICE_SUPPLIES }
     ]
-    
+
     this.manualEntry = true;
   }
 
   ionViewDidLoad() {
-    debugger;
     this.currentUser = this.memStore.userMemoryData().data;
-    if (this.currentUser) {
+    this.ownerId = this.currentUser.userid; 
+    if (!this.currentUser) {
       this.memStore.userMemoryData().dataSubject
         .takeUntil(this.userUnsubscribe)
         .subscribe((value: User) => {
           this.currentUser = value;
-          this.ownerId = value.userid; 
-          debugger; 
+          this.ownerId = value.userid;
         });
     }
+  }
+
+  ionViewDidLeave(){
   }
 
 
@@ -123,7 +125,7 @@ export class AddProductPage {
     return this.isValid;
   }
 
-  public inItManualEntry() : void {
+  public inItManualEntry(): void {
     this.manualEntry = !this.manualEntry;
     console.log(this.manualEntry);
   }

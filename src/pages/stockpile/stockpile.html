@@ -15,12 +15,15 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row col-sm wrap *ngFor="let prod of productArray">
-      <ion-col col-3> {{product.name}}</ion-col>
-      <ion-col col-3> {{product.brand}}</ion-col>
-      <ion-col col-3> {{options[product.category]}}</ion-col>
-      <ion-col col-3> <button ion-button small color="danger" (click)="increment(res)"> Details</button></ion-col>
-    </ion-row>
+    <ion-row responsive-sm wrap *ngFor="let product of productArray">
+      <div class="details">
+        <ion-col> {{product.name}} </ion-col>
+        <ion-col> {{product.brand}}</ion-col>
+        <ion-col> {{options[product.category]}}</ion-col>
+        <ion-col class="decInc" ion-button (click)="increment(res)"> Details</ion-col>
+      </div>
+    </ion-row>  
   </ion-grid>
+ 
   <button class="addProduct" ion-button (click)="addProduct()">Push Me</button>
 </ion-content>

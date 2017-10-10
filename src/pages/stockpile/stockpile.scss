@@ -1,13 +1,32 @@
 page-stockpile {
     
     .addProduct{
-        position: absolute;
+        position: relative;
         bottom: 10%;
         width: 80%;
         margin: 1% 10%;
     }
 
     .stockpile {
-        
+        width: 98%;
+
+        .decInc {
+            position: relative; 
+            width: 10%; 
+        }
+        .row {
+            width: 98%; 
+            position: relative;
+            
+        }
+      
+        .details {
+            position: relative; 
+            width: 25%;
+            background-color: green; 
+            border: solid black;
+        }
     }
+
+ 
 }

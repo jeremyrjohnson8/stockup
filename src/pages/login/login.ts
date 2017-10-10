@@ -50,7 +50,7 @@ export class LoginPage {
 
   login(): void {
     if (this.email && this.password) {
-      this.notificationProvider.initLoader(); 
+      this.notificationProvider.presentLoader(); 
       this.auth.doLogin(this.email, this.password).then((value: FirebaseAuthData) => {
         if (value){
           this.navCtrl.push(TabsPage, {
@@ -61,6 +61,7 @@ export class LoginPage {
         }
       }).catch((error: Error) => {
         alert(`Error message ${error.message}`);
+        this.notificationProvider.dismissLoader(); 
       });
     }
   }

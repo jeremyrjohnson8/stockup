@@ -28,7 +28,6 @@ export class MemoryStoreProvider {
   }
 
   public userMemoryData(): GenericMemoryData<User> {
-    debugger; 
     if (!this._userMemoryData) {
       this._userMemoryData = new GenericMemoryData<User>();
     }
